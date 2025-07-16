@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Will you be mine?</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffe0e6 0%, #ffd6e0 50%, #f7b2b7 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    h1, .question {
+      color: #d72660;
+      font-size: 2.2em;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 16px #fff, 0 0px 8px #d72660;
+      transition: opacity 0.5s;
+    }
+    .btn {
+      font-size: 1.1em;
+      padding: 12px 32px;
+      margin: 18px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(90deg, #d72660 60%, #ffb6b9 100%);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 4px 16px rgba(215,38,96,0.15);
+      font-weight: 600;
+      outline: none;
+      position: relative;
+      z-index: 2;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg, #a91b4a 60%, #ffb6b9 100%);
+      transform: scale(1.1) rotate(-3deg);
+      box-shadow: 0 8px 32px rgba(215,38,96,0.25), 0 0 16px #fff;
+    }
+    #no-btn.fly {
+      animation: flyNo 1s forwards;
+    }
+    @keyframes flyNo {
+      0% { transform: translate(0,0) rotate(0deg);}
+      60% { transform: translate(-100px,-80px) rotate(-30deg);}
+      100% { transform: translate(600px,-200px) rotate(60deg); opacity:0;}
+    }
+    #treasure {
+      display: none;
+      margin: 40px auto 0;
+      width: 110px;
+      cursor: pointer;
+      animation: pop 0.7s;
+      filter: drop-shadow(0 0 16px #ffb6b9);
+    }
+    #open-chest-btn {
+      display: none;
+      margin-top: 18px;
+      font-size: 1.1em;
+      padding: 10px 28px;
+      border-radius: 18px;
+      border: none;
+      background: #ffb6b9;
+      color: #d72660;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #ffd6e0;
+      transition: background 0.3s;
+    }
+    #poetry {
+      display: none;
+      font-size: 1em;
+      color: #a91b4a;
+      margin-top: 30px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+      text-shadow: 0 2px 8px #fff;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5);}
+      70% { transform: scale(1.2);}
+      100% { transform: scale(1);}
+    }
+  </style>
+</head>
+<body>
+  <h1 id="main-question">Will you be mine? 💖</h1>
+  <div id="options">
+    <button class="btn" id="yes-btn">Yes</button>
+    <button class="btn" id="no-btn">No</button>
+  </div>
+  <div id="followup" style="display:none;">
+    <div class="question" id="followup-question"></div>
+    <button class="btn" id="followup-yes">Yes</button>
+    <button class="btn" id="followup-no">No</button>
+  </div>
+  <img id="treasure" src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png" alt="Treasure Chest">
+  <button id="open-chest-btn">Press to open</button>
+  <div id="poetry"></div>
+  <script>
+    const followupQuestions = [
+      "So you ready to give your loyalty to me?",
+      "Are you ready to go young to old with me?",
+      "Will I be the most important person to you?"
+    ];
+    let followupIndex = 0;
+
+    const yesBtn = document.getElementById('yes-btn');
+    const noBtn = document.getElementById('no-btn');
+    const optionsDiv = document.getElementById('options');
+    const mainQ = document.getElementById('main-question');
+    const followupDiv = document.getElementById('followup');
+    const followupQ = document.getElementById('followup-question');
+    const followupYes = document.getElementById('followup-yes');
+    const followupNo = document.getElementById('followup-no');
+    const treasure = document.getElementById('treasure');
+    const openChestBtn = document.getElementById('open-chest-btn');
+    const poetry = document.getElementById('poetry');
+
+    // No button flies away
+    noBtn.onclick = function() {
+      noBtn.classList.add('fly');
+      setTimeout(() => {
+        noBtn.style.display = 'none';
+      }, 1000);
+    };
+
+    // Yes button starts followup
+    yesBtn.onclick = function() {
+      optionsDiv.style.display = 'none';
+      showFollowup();
+    };
+
+    function showFollowup() {
+      followupDiv.style.display = 'block';
+      followupQ.textContent = followupQuestions[followupIndex];
+      followupYes.style.display = 'inline-block';
+      followupNo.style.display = 'inline-block';
+    }
+
+    followupYes.onclick = function() {
+      followupIndex++;
+      if (followupIndex < followupQuestions.length) {
+        followupQ.textContent = followupQuestions[followupIndex];
+      } else {
+        followupDiv.style.display = 'none';
+        showTreasure();
+      }
+    };
+
+    followupNo.onclick = function() {
+      followupDiv.style.display = 'none';
+      mainQ.textContent = "Aww, that's okay. Maybe later? 😊";
+    };
+
+    function showTreasure() {
+      treasure.style.display = 'block';
+      openChestBtn.style.display = 'inline-block';
+    }
+
+    openChestBtn.onclick = function() {
+      treasure.style.display = 'none';
+      openChestBtn.style.display = 'none';
+      poetry.innerHTML = `
+        <span style="font-size:1.0em;">🎁💖</span><br>
+        Tere bina adhura lagta hai har ek pal,<br>
+        Mujhse jud jaa jaise chanda se chandni ka rishta atal.<br>
+        Aaj kehna chahta hoon dil ki ek baat,<br>
+        Meri zindagi ho tum, meri har ek mulaqat.<br>
+        Mohabbat hai tumse bepanah, yeh dil maanta hai,<br>
+        Bas ek baar haan keh do, yeh jahan roshan ho jaata hai.<br>
+        Main chahta hoon tere saath har ek subah, har ek shaam,<br>
+        Kya tu de sakti hai mujhe apni zindagi ka pyaara inaam?<br>
+        Dil karta hai tujhe apni har saans mein basa loon,<br>
+        Ek pal bhi juda na hoon, tujhko apna bana loon.
+      `;
+      poetry.style.display = 'block';
+      setTimeout(() => {
+        poetry.style.opacity = 1;
+      }, 200);
+    };
+  </script>
+</body>
+</html>
